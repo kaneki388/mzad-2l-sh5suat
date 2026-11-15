@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B3C40">
+<title>مزاد الشخصيات</title>
+<meta name="description" content="لعبة مزاد: ميزانية ثابتة وشخصيات أنمي ولاعبين كورة وأكل وهدوم. زايد وكوّن فريقك.">
+<meta property="og:title" content="مزاد الشخصيات">
+<meta property="og:description" content="كل واحد معاه ميزانية. زايد، اكسب، وكوّن فريقك.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔨%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Readex+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== الأساسيات ===== */
+:root{
+  --bg:#0B3C40; --panel:#11555A; --panel-2:#0D464B; --line:#2A8087;
+  --gold:#FFB627; --gold-deep:#B97800; --tomato:#F2503A; --linen:#FFF6E3;
+  --ink:#0C2427; --mist:#D6ECE9; --dim:#A9D0CC;
+  --display:"Lalezar","Readex Pro","Segoe UI",Tahoma,sans-serif;
+  --text:"Readex Pro","Segoe UI",Tahoma,"Noto Sans Arabic",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--mist);font:400 16px/1.55 var(--text);-webkit-tap-highlight-color:transparent}
+button,input{font:inherit;color:inherit}
+button{touch-action:manipulation}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--linen);outline-offset:3px}
+.screen{min-height:100dvh;display:flex;flex-direction:column}
+.wrap{width:100%;max-width:560px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== الخيمة: شريط السوق فوق كل شاشة ===== */
+.tent{position:relative;flex:none;height:20px;margin-bottom:14px;background:repeating-linear-gradient(90deg,var(--tomato) 0 26px,var(--linen) 26px 52px)}
+.tent::after{content:"";position:absolute;inset:100% 0 auto 0;height:13px;background:
+  radial-gradient(circle at 13px 0,var(--tomato) 13px,transparent 13.5px) 0 0/52px 13px,
+  radial-gradient(circle at 39px 0,var(--linen) 13px,transparent 13.5px) 0 0/52px 13px}
+
+/* ===== الأزرار ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;padding:14px 22px;background:var(--gold);color:var(--ink);font-weight:600;cursor:pointer;box-shadow:0 5px 0 var(--gold-deep);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--gold-deep)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.big{width:100%;font-size:20px;padding:16px 22px}
+.btn.ghost{background:transparent;color:var(--linen);box-shadow:inset 0 0 0 2px var(--line)}
+.btn.ghost:active{transform:none;box-shadow:inset 0 0 0 2px var(--linen)}
+.btn.danger{background:var(--tomato);color:#fff;box-shadow:0 5px 0 #9b2a1a}
+.ib{flex:none;width:42px;height:42px;border:0;border-radius:12px;background:var(--panel);color:var(--linen);font-size:18px;cursor:pointer}
+.ib[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+
+/* ===== شاشة الإعدادات ===== */
+.hero{padding:22px 0 8px;text-align:center}
+.hero h1{margin:0;font:400 clamp(52px,15vw,78px)/1 var(--display);color:var(--gold);text-shadow:0 4px 0 #8a4f00}
+.hero p{margin:12px auto 0;max-width:28ch;font-size:18px;color:var(--mist)}
+.panel{margin-top:14px;padding:16px;border-radius:18px;background:var(--panel)}
+.panel h2{margin:0 0 12px;font:600 15px/1.3 var(--text);color:var(--dim)}
+.panel h2 small{font-weight:400}
+.seat{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.dot{flex:none;width:12px;height:36px;border-radius:6px;background:var(--pc)}
+.name{flex:1;min-width:0;padding:10px 12px;border:2px solid transparent;border-radius:12px;background:var(--panel-2);outline:0}
+.name::placeholder{color:var(--dim);opacity:.8}
+.name:focus{border-color:var(--pc)}
+.seg{display:inline-flex;gap:2px;padding:3px;border-radius:12px;background:var(--panel-2)}
+.seg button{border:0;border-radius:9px;padding:8px 12px;background:transparent;color:var(--dim);font-weight:500;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--linen);color:var(--ink);font-weight:600}
+.seg.wide{display:flex}
+.seg.wide button{flex:1;padding:10px 6px}
+.x{flex:none;width:34px;height:34px;border:0;border-radius:10px;background:transparent;color:var(--dim);font-size:22px;cursor:pointer}
+.add{width:100%;margin-top:2px;padding:10px;border:2px dashed var(--line);border-radius:12px;background:transparent;color:var(--dim);font-weight:500;cursor:pointer}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0}
+.row+.row{border-top:1px dashed #2a808799}
+.lbl{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--linen)}
+.lbl small{display:block;font-weight:400;font-size:13px;color:var(--dim)}
+.ico{width:34px;text-align:center;font-size:24px}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:38px;height:38px;border:0;border-radius:12px;background:var(--panel-2);font-size:22px;line-height:1;cursor:pointer}
+.step button[disabled]{opacity:.35}
+.step output{min-width:30px;text-align:center;font:400 28px/1 var(--display);color:var(--gold)}
+.foot{display:grid;gap:12px;margin-top:20px}
+.note{margin:0;text-align:center;font-size:14px;color:var(--dim)}
+
+/* ===== مقدمة الجولة ===== */
+.intro{flex:1;display:grid;place-content:center;gap:14px;padding:24px;text-align:center}
+.intro .big-ico{font-size:84px;line-height:1}
+.intro h2{margin:0;font:400 clamp(40px,11vw,64px)/1.1 var(--display);color:var(--gold)}
+.intro p{margin:0 auto;max-width:34ch;font-size:18px}
+.intro .tag{color:var(--dim);font-size:15px}
+/* ===== شاشة المزاد ===== */
+.arena{flex:1;display:flex;flex-direction:column;width:100%;max-width:760px;margin:0 auto}
+.hud{display:flex;align-items:center;gap:8px;padding:0 12px 8px}
+.ttl{flex:1;min-width:0}
+.ttl b{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:400 24px/1.1 var(--display);color:var(--linen)}
+.ttl span{font-size:13px;color:var(--dim)}
+.roster{display:flex;gap:8px;overflow-x:auto;padding:4px 12px 12px;scrollbar-width:none}
+.roster::-webkit-scrollbar{display:none}
+.pl{flex:1 0 82px;display:grid;min-width:82px;padding:7px 9px;border:0;border-inline-start:6px solid var(--pc);border-radius:14px;background:var(--panel);color:var(--mist);text-align:start;cursor:pointer}
+.pl>*{min-width:0}
+.pl b{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;font-weight:600;color:var(--linen)}
+.bot{font-size:12px}
+@media (max-width:600px){.bot{display:none}}
+.pl span{white-space:nowrap;font-size:12px;color:var(--dim)}
+.pl em{font-style:normal;font-weight:600;color:var(--gold)}
+.pl.lead{box-shadow:0 0 0 3px var(--pc)}
+.pl.full{opacity:.6}
+
+.stage{position:relative;overflow:hidden;padding:0 12px 6px}
+.lot{--rc:var(--line);--h:180;position:relative;overflow:hidden;display:grid;grid-template-columns:112px 1fr;gap:14px;align-items:center;padding:14px;border-radius:20px;background:var(--panel);box-shadow:inset 0 0 0 3px var(--rc)}
+.lot::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 35%,#ffffff4d 50%,transparent 65%);transform:translateX(120%)}
+.lot.legend::before{animation:shine 1.4s .25s ease-out 1}
+.art{display:grid;place-items:center;width:112px;height:112px;overflow:hidden;border-radius:16px;font-size:62px;line-height:1;background:linear-gradient(160deg,hsl(var(--h) 72% 52%),hsl(calc(var(--h) + 35) 66% 30%))}
+.art img{width:100%;height:100%;object-fit:cover}
+.info{min-width:0}
+.info .nm{margin:0;font:400 clamp(34px,10vw,46px)/1.05 var(--display);color:var(--linen)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{padding:2px 10px;border-radius:999px;background:var(--panel-2);color:var(--mist);font-size:13px;white-space:nowrap}
+.chip.r{background:var(--rc);color:var(--ink);font-weight:600}
+.meter{height:8px;margin-top:10px;overflow:hidden;border-radius:99px;background:var(--panel-2)}
+.meter i{display:block;width:var(--w);height:100%;border-radius:99px;background:var(--rc)}
+.stat{margin-top:6px;font-size:14px;color:var(--dim)}
+.stat b{color:var(--linen)}
+
+.bid{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 6px 0}
+.bid .lab{font-size:14px;color:var(--dim)}
+.price{font:400 clamp(64px,20vw,96px)/1 var(--display);color:var(--gold);text-shadow:0 4px 0 #8a4f00}
+.price.bump{animation:bump .25s}
+.who{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:var(--pc,var(--panel));color:var(--ink);font-weight:600}
+.who.idle{background:var(--panel);color:var(--dim);font-weight:500}
+.call{min-height:1.3em;margin-top:2px;text-align:center;font:400 clamp(32px,9vw,46px)/1.2 var(--display);color:var(--linen)}
+.call.pop{animation:pop .3s ease-out}
+.call.last{color:#FF8A73}
+
+.stamp{position:absolute;z-index:2;left:50%;top:84px;transform:translate(-50%,0) rotate(-8deg);padding:4px 24px 8px;border:5px solid var(--pc);border-radius:14px;background:var(--linen);color:var(--ink);text-align:center;white-space:nowrap;box-shadow:0 6px 0 #0006;animation:slam .42s cubic-bezier(.2,1.4,.4,1) both}
+.stamp b{display:block;font:400 50px/1.1 var(--display);color:var(--tomato)}
+.stamp span{font-weight:600;font-size:15px}
+.stamp.none{--pc:var(--gold-deep)}
+.stamp.none b{color:var(--gold-deep);font-size:36px}
+.veil{position:absolute;inset:0 12px;z-index:3;display:grid;place-content:center;gap:12px;border-radius:20px;background:#0b3c40ed;text-align:center}
+.veil b{font:400 44px/1 var(--display);color:var(--gold)}
+
+.feed{flex:1 1 0;min-height:0;margin:8px 18px 0;padding:0;overflow:hidden;list-style:none;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:6px}
+.feed li{flex:none;width:100%;display:flex;align-items:center;gap:10px;padding:5px 12px;border-radius:10px;background:var(--panel-2);color:var(--mist);font-size:15px}
+.feed li:first-child{background:var(--panel);color:var(--linen)}
+.feed li:nth-child(n+3){opacity:.6}
+.feed i{flex:none;width:10px;height:10px;border-radius:50%;background:var(--pc)}
+.feed span{margin-inline-start:auto;font:400 20px/1 var(--display);color:var(--gold)}
+.dock{position:sticky;bottom:0;margin-top:auto;padding:14px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,transparent,var(--bg) 24%)}
+.incs{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
+.inc{min-width:56px;padding:8px 14px;border:0;border-radius:999px;background:var(--panel);color:var(--linen);font-weight:600;cursor:pointer}
+.inc[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.paddles{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}
+.paddle{position:relative;display:grid;min-height:64px;padding:8px 14px;border:0;border-radius:16px;background:var(--pc);color:var(--ink);text-align:start;cursor:pointer;box-shadow:0 5px 0 color-mix(in srgb,var(--pc) 55%,#000);transition:transform .08s,box-shadow .08s,filter .15s}
+.paddle:active:not([disabled]){transform:translateY(4px);box-shadow:0 1px 0 color-mix(in srgb,var(--pc) 55%,#000)}
+.paddle .n{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-weight:600}
+.paddle .v{font:400 26px/1.15 var(--display)}
+.paddle .k{display:none;position:absolute;inset-block-start:8px;inset-inline-end:12px;font-size:12px;opacity:.6}
+.paddle[disabled]{filter:saturate(.3) brightness(.72);cursor:not-allowed}
+.paddle.leading{filter:none;box-shadow:0 0 0 4px var(--linen)}
+.watch{margin:0;text-align:center;color:var(--dim)}
+
+/* ===== النتيجة ===== */
+.res h2.t{margin:8px 0 4px;text-align:center;font:400 clamp(44px,12vw,64px)/1.1 var(--display);color:var(--gold);text-shadow:0 4px 0 #8a4f00}
+.res .sub{margin:0 0 18px;text-align:center;color:var(--dim)}
+.rank{display:grid;gap:14px}
+.team{padding:14px;border-radius:18px;border-top:8px solid var(--pc);background:var(--panel)}
+.team.first{background:var(--linen);color:var(--ink)}
+.team .hd{display:flex;align-items:center;gap:10px}
+.team .medal{font-size:30px;line-height:1}
+.team .tn{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:400 28px/1.2 var(--display);color:var(--linen)}
+.team.first .tn{color:var(--ink)}
+.team .sc{font:400 40px/1 var(--display);color:var(--gold)}
+.team.first .sc{color:var(--gold-deep)}
+.parts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.part{padding:2px 10px;border-radius:999px;background:var(--panel-2);color:var(--mist);font-size:13px}
+.team.first .part{background:#0c242716;color:var(--ink)}
+.part.good{background:var(--gold);color:var(--ink);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-top:12px}
+.tile{--rc:var(--line);display:grid;gap:1px;min-width:0;padding:8px 6px 10px;border-radius:12px;background:hsl(var(--h) 48% 26%);box-shadow:inset 0 -5px 0 var(--rc);color:#fff;text-align:center}
+.tile .e{font-size:28px;line-height:1.15}
+.tile b{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;font-weight:600;line-height:1.3}
+.tile small{font-size:12px;color:#ffffffb8}
+.tile.empty{background:transparent;box-shadow:none;border:2px dashed var(--line);color:var(--dim)}
+.acts{display:grid;gap:10px;margin-top:22px}
+
+/* ===== النوافذ والتنبيه ===== */
+dialog{width:calc(100% - 24px);max-width:520px;max-height:88dvh;padding:0;border:0;border-radius:20px;background:var(--panel);color:var(--mist)}
+dialog::backdrop{background:#041c1ecc}
+.dlg{padding:18px}
+.dlg h3{margin:0 0 10px;font:400 30px/1.15 var(--display);color:var(--gold)}
+.dlg h4{margin:14px 0 0;font-size:14px;font-weight:600;color:var(--dim)}
+.dlg ul{margin:0 0 14px;padding-inline-start:20px}
+.dlg li{margin-bottom:6px}
+.dlg .btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;margin-top:14px}
+.toast{position:fixed;z-index:20;inset-inline:16px;bottom:calc(24px + env(safe-area-inset-bottom));width:fit-content;max-width:calc(100% - 32px);margin-inline:auto;padding:10px 18px;border-radius:12px;background:var(--linen);color:var(--ink);font-weight:600;text-align:center;box-shadow:0 6px 0 #0005}
+
+/* ===== حركة ===== */
+@keyframes pop{0%{transform:scale(.82);opacity:.5}60%{transform:scale(1.1)}100%{transform:none;opacity:1}}
+@keyframes bump{50%{transform:scale(1.07)}}
+@keyframes slam{0%{transform:translate(-50%,0) rotate(-8deg) scale(2.6);opacity:0}60%{opacity:1}100%{transform:translate(-50%,0) rotate(-8deg) scale(1)}}
+@keyframes shine{to{transform:translateX(-120%)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== شاشات أكبر ===== */
+@media (hover:hover) and (pointer:fine){.paddle .k{display:block}}
+@media (min-width:820px){
+  .lot{grid-template-columns:152px 1fr;gap:22px;padding:20px}
+  .art{width:152px;height:152px;font-size:84px}
+  .info .nm{font-size:56px}
+  .stamp{top:112px}
+  .rank{grid-template-columns:1fr 1fr}
+  .wrap.res-wrap{max-width:980px}
+}
+.tile .e img{width:40px;height:40px;object-fit:cover;border-radius:10px}
+</style>
+</head>
+<body>
+<main>
+  <section id="s-setup" class="screen" hidden>
+    <div class="tent"></div>
+    <div class="wrap">
+      <header class="hero">
+        <h1>مزاد الشخصيات</h1>
+        <p>كل واحد معاه ميزانية. زايد، اكسب، وكوّن فريقك.</p>
+      </header>
+      <section class="panel"><h2>اللاعبين</h2><div id="seats"></div><button class="add" id="add-seat" type="button">+ ضيف لاعب</button></section>
+      <section class="panel"><h2>الميزانية لكل لاعب</h2><div class="seg wide" id="budget"></div></section>
+      <section class="panel"><h2>كل لاعب ياخد كام من كل نوع <small>(صفر يشيل النوع)</small></h2><div id="slots"></div></section>
+      <section class="panel"><h2>سرعة الدلّال</h2><div class="seg wide" id="speed"></div></section>
+      <div class="foot">
+        <button class="btn big" id="start" type="button">ابدأ المزاد</button>
+        <button class="btn ghost" id="rules" type="button">القواعد</button>
+        <p class="note" id="sum"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-intro" class="screen" hidden>
+    <div class="tent"></div>
+    <div class="intro">
+      <div class="big-ico" id="i-ico"></div>
+      <div class="tag" id="i-tag"></div>
+      <h2 id="i-name"></h2>
+      <p id="i-text"></p>
+      <button class="btn big" id="i-go" type="button">يلا</button>
+    </div>
+  </section>
+
+  <section id="s-auction" class="screen" hidden>
+    <div class="tent"></div>
+    <div class="arena">
+      <div class="hud">
+        <div class="ttl"><b id="h-round"></b><span id="h-lot"></span></div>
+        <button class="ib" id="b-pause" type="button" aria-label="إيقاف مؤقت">⏸</button>
+        <button class="ib" id="b-sound" type="button" aria-label="الصوت" aria-pressed="true">🔊</button>
+        <button class="ib" id="b-quit" type="button" aria-label="خروج">✕</button>
+      </div>
+      <div class="roster" id="roster"></div>
+      <div class="stage" id="stage">
+        <div class="lot" id="lot"></div>
+        <div class="bid">
+          <div><div class="lab">السعر الحالي</div><div class="price" id="price">0</div></div>
+          <div class="who idle" id="who">مين يفتح؟</div>
+        </div>
+        <div class="call" id="call"></div>
+      </div>
+      <ul class="feed" id="feed" aria-hidden="true"></ul>
+      <div class="dock" id="dock">
+        <div class="incs" id="incs"></div>
+        <div class="paddles" id="paddles"></div>
+        <p class="watch" id="watch" hidden>الكمبيوتر بس اللي بيلعب. اتفرج.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-results" class="screen" hidden>
+    <div class="tent"></div>
+    <div class="wrap res-wrap res">
+      <h2 class="t">النتيجة</h2>
+      <p class="sub" id="r-sub"></p>
+      <div class="rank" id="rank"></div>
+      <div class="acts">
+        <button class="btn big" id="r-again" type="button">العب تاني</button>
+        <button class="btn ghost" id="r-copy" type="button">انسخ النتيجة</button>
+        <button class="btn ghost" id="r-setup" type="button">رجوع للإعدادات</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="d-rules"><div class="dlg">
+  <h3>القواعد</h3>
+  <ul>
+    <li>كل لاعب بيبدأ بنفس الميزانية.</li>
+    <li>المزاد جولات: كل جولة نوع (أنمي، كورة، أكل، هدوم) وكل لاعب لازم يكمّل خاناته منه.</li>
+    <li>دوس على اسمك عشان تزايد. أعلى سعر بياخد العنصر.</li>
+    <li>لو محدش زاد لحد ما الدلّال يقول «رسّى»، العنصر بيروح للمتصدر.</li>
+    <li>لازم تسيب 1 على الأقل لكل خانة فاضلة، عشان تقدر تكمّل فريقك.</li>
+    <li>النتيجة = مجموع قوة العناصر + الكومبو + الفلوس الباقية (الميزانية كلها = 50 نقطة).</li>
+    <li>كومبو: نفس المجموعة (&lrm;+5 لكل واحد زيادة)، أو الطقم الكامل (تشكيلة متوازنة، وجبة كاملة، لبس كامل).</li>
+    <li>على الكمبيوتر: مفاتيح 1 لـ 6 بتزايد للاعب، والمسافة بتوقف.</li>
+  </ul>
+  <div class="btns"><button class="btn" type="button" data-close>تمام</button></div>
+</div></dialog>
+
+<dialog id="d-team"><div class="dlg" id="d-team-body"></div></dialog>
+
+<dialog id="d-quit"><div class="dlg">
+  <h3>تخرج من المزاد؟</h3>
+  <p>اللعبة هتتقفل والنتيجة مش هتتحفظ.</p>
+  <div class="btns">
+    <button class="btn ghost" type="button" data-close>كمّل لعب</button>
+    <button class="btn danger" type="button" id="q-yes">اخرج</button>
+  </div>
+</div></dialog>
+
+<div class="toast" id="toast" hidden></div>
+<div class="sr" id="live" aria-live="polite"></div>
+
+<script>
+'use strict';
+/* ==========================================================
+   قوايم العناصر — عدّل هنا براحتك
+   كل سطر: [الاسم, المجموعة, القوة من 1 لـ 100, إيموجي, النوع (اختياري), رابط صورة (اختياري)]
+   - المجموعة: نفس المجموعة في الفريق بتدّي كومبو (مسلسل / منتخب / مطبخ / ستايل)
+   - النوع: بيتحسب في الطقم الكامل (تشكيلة متوازنة / وجبة كاملة / لبس كامل)
+   - رابط الصورة: مثلًا 'images/zoro.jpg' وبتظهر بدل الإيموجي
+   ========================================================== */
+const CATS = [
+  { id: 'anime', name: 'شخصيات أنمي',   one: 'شخصية', ico: '🎌', stat: 'قوة',   set: null },
+  { id: 'sport', name: 'لاعبين كورة',   one: 'لاعب',  ico: '⚽', stat: 'تقييم', set: { need: ['حارس', 'دفاع', 'وسط', 'هجوم'], bonus: 15, label: 'تشكيلة متوازنة' } },
+  { id: 'food',  name: 'أكل ومشروبات', one: 'أكلة',  ico: '🍽️', stat: 'طعم',   set: { need: ['رئيسي', 'مشروب', 'حلو'],        bonus: 12, label: 'وجبة كاملة' } },
+  { id: 'wear',  name: 'هدوم',          one: 'قطعة',  ico: '👕', stat: 'ستايل', set: { need: ['فوق', 'تحت', 'كوتشي'],          bonus: 12, label: 'لبس كامل' } },
+];
+
+const RAW = {
+  anime: [
+    ['لوفي','ون بيس',95,'👒'], ['زورو','ون بيس',94,'⚔️'], ['سانجي','ون بيس',88,'🦵'], ['شانكس','ون بيس',92,'⚓'], ['آيس','ون بيس',85,'🔥'],
+    ['ناروتو','ناروتو',94,'🍥'], ['ساسكي','ناروتو',93,'⚡'], ['كاكاشي','ناروتو',90,'👁️'], ['إيتاتشي','ناروتو',95,'🌙'], ['هيناتا','ناروتو',72,'🌸'],
+    ['غوكو','دراغون بول',98,'🐉'], ['فيجيتا','دراغون بول',94,'👑'], ['غوهان','دراغون بول',88,'💥'], ['فريزا','دراغون بول',92,'👾'],
+    ['غوجو','جوجوتسو كايسن',97,'🕶️'], ['سوكونا','جوجوتسو كايسن',96,'👹'],
+    ['ليفاي','هجوم العمالقة',93,'🗡️'], ['إيرين','هجوم العمالقة',90,'💢'], ['ميكاسا','هجوم العمالقة',88,'🧣'],
+    ['تانجيرو','ديمون سلاير',87,'🌊'], ['رينغوكو','ديمون سلاير',90,'🔥'], ['نيزوكو','ديمون سلاير',84,'🎀'],
+    ['لايت','ديث نوت',89,'📓'], ['إل','ديث نوت',90,'🍰'],
+    ['غون','هنتر × هنتر',84,'🎣'], ['كيلوا','هنتر × هنتر',90,'🛹'],
+    ['ديكو','ماي هيرو أكاديميا',85,'💪'], ['باكوغو','ماي هيرو أكاديميا',84,'💣'],
+    ['إيتشيغو','بليتش',90,'🍓'], ['كونان','المحقق كونان',88,'🔍'], ['ماجد','كابتن ماجد',82,'⚽'],
+    ['بيكاتشو','بوكيمون',85,'⚡'], ['سايتاما','ون بانش مان',96,'👊'], ['دورايمون','دورايمون',80,'🔔'], ['نوبيتا','دورايمون',45,'👓'],
+  ],
+  sport: [
+    ['ميسي','الأرجنتين',98,'⚽','هجوم'], ['رونالدو','البرتغال',97,'⚽','هجوم'], ['بيليه','البرازيل',99,'⚽','هجوم'], ['مبابي','فرنسا',95,'⚽','هجوم'],
+    ['هالاند','النرويج',95,'⚽','هجوم'], ['صلاح','مصر',95,'⚽','هجوم'], ['فينيسيوس','البرازيل',92,'⚽','هجوم'], ['نيمار','البرازيل',91,'⚽','هجوم'],
+    ['يامال','إسبانيا',90,'⚽','هجوم'], ['مرموش','مصر',86,'⚽','هجوم'], ['حسام حسن','مصر',84,'⚽','هجوم'],
+    ['مارادونا','الأرجنتين',97,'🎯','وسط'], ['زيدان','فرنسا',96,'🎯','وسط'], ['رونالدينيو','البرازيل',93,'🎯','وسط'], ['دي بروين','بلجيكا',92,'🎯','وسط'],
+    ['إنييستا','إسبانيا',92,'🎯','وسط'], ['أبوتريكة','مصر',91,'🎯','وسط'], ['مودريتش','كرواتيا',90,'🎯','وسط'], ['بيلينغهام','إنجلترا',90,'🎯','وسط'],
+    ['الخطيب','مصر',89,'🎯','وسط'], ['إمام عاشور','مصر',81,'🎯','وسط'], ['النني','مصر',80,'🎯','وسط'],
+    ['مالديني','إيطاليا',93,'🛡️','دفاع'], ['فان دايك','هولندا',91,'🛡️','دفاع'], ['راموس','إسبانيا',90,'🛡️','دفاع'], ['روبرتو كارلوس','البرازيل',89,'🛡️','دفاع'],
+    ['حكيمي','المغرب',88,'🛡️','دفاع'], ['كانافارو','إيطاليا',88,'🛡️','دفاع'], ['رامي ربيعة','مصر',78,'🛡️','دفاع'],
+    ['نوير','ألمانيا',93,'🧤','حارس'], ['بوفون','إيطاليا',93,'🧤','حارس'], ['كاسياس','إسبانيا',92,'🧤','حارس'], ['كورتوا','بلجيكا',91,'🧤','حارس'],
+    ['الحضري','مصر',88,'🧤','حارس'], ['الشناوي','مصر',84,'🧤','حارس'],
+  ],
+  food: [
+    ['كشري','مصري',90,'🍲','رئيسي'], ['شاورما','شامي',88,'🌯','رئيسي'], ['كفتة','مشويات',86,'🍢','رئيسي'], ['حمام محشي','مصري',92,'🍗','رئيسي'],
+    ['بيتزا','إيطالي',91,'🍕','رئيسي'], ['برجر','أمريكي',87,'🍔','رئيسي'], ['سوشي','ياباني',82,'🍣','رئيسي'], ['مكرونة بشاميل','مصري',89,'🍝','رئيسي'],
+    ['فطير مشلتت','مصري',88,'🥞','رئيسي'], ['ستيك','مشويات',92,'🥩','رئيسي'],
+    ['قهوة','ساخن',82,'☕','مشروب'], ['شاي بلبن','ساخن',80,'🫖','مشروب'], ['عصير قصب','بارد',88,'🥤','مشروب'], ['ليمون بالنعناع','بارد',85,'🍋','مشروب'],
+    ['سحلب','ساخن',86,'🥛','مشروب'], ['عصير مانجو','بارد',90,'🥭','مشروب'],
+    ['كنافة','شرقي',94,'🥮','حلو'], ['بسبوسة','شرقي',86,'🍰','حلو'], ['أم علي','شرقي',92,'🍮','حلو'], ['آيس كريم','بارد',90,'🍦','حلو'],
+    ['شوكولاتة','عالمي',85,'🍫','حلو'], ['دونات','عالمي',80,'🍩','حلو'], ['رز بلبن','مصري',82,'🍚','حلو'], ['بقلاوة','شرقي',88,'🥧','حلو'],
+  ],
+  wear: [
+    ['هودي أوفر سايز','شارع',85,'🧥','فوق'], ['تيشيرت أبيض','كاجوال',70,'👕','فوق'], ['جاكيت جلد','شيك',90,'🧥','فوق'], ['قميص رسمي','شيك',82,'👔','فوق'],
+    ['تيشيرت كورة','رياضي',84,'👕','فوق'], ['بدلة كاملة','شيك',93,'🤵','فوق'], ['جلابية','تراثي',74,'👘','فوق'], ['كنزة صوف','كاجوال',76,'🧶','فوق'],
+    ['جينز','كاجوال',80,'👖','تحت'], ['بنطلون كارجو','شارع',84,'👖','تحت'], ['شورت رياضي','رياضي',72,'🩳','تحت'], ['بنطلون تريننج','رياضي',78,'🏃','تحت'],
+    ['بنطلون قماش','شيك',82,'👖','تحت'], ['شورت جينز','كاجوال',68,'🩳','تحت'],
+    ['كوتشي رياضي','رياضي',88,'👟','كوتشي'], ['كوتشي أبيض','كاجوال',90,'👟','كوتشي'], ['بوت','شارع',85,'🥾','كوتشي'], ['جزمة كلاسيك','شيك',86,'👞','كوتشي'],
+    ['شبشب','كاجوال',35,'🩴','كوتشي'],
+    ['ساعة','شيك',88,'⌚','إكسسوار'], ['نظارة شمس','كاجوال',80,'🕶️','إكسسوار'], ['كاب','شارع',76,'🧢','إكسسوار'], ['شنطة ظهر','كاجوال',72,'🎒','إكسسوار'],
+    ['سلسلة','شارع',82,'📿','إكسسوار'],
+  ],
+};
+
+const ITEMS = {};
+for (const c of CATS) ITEMS[c.id] = RAW[c.id].map(([n, t, p, e, k, img]) => ({ n, t, p, e, k: k || '', img: img || '', cat: c.id }));
+
+
+/* ==========================================================
+   المحرك — قواعد المزاد والكمبيوتر والنتيجة
+   ========================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const rnd = (a, b) => a + Math.random() * (b - a);
+const sum = (a, f) => a.reduce((s, x) => s + f(x), 0);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const catOf = id => CATS.find(c => c.id === id);
+
+const COLORS = ['#FF6B6B', '#4CC9F0', '#B5E048', '#B794F6', '#FF8FCB', '#F5C28B'];
+const BUDGETS = [50, 100, 200, 500, 1000];
+const COMBO = 5;                       // نقط الكومبو لكل عنصر زيادة من نفس المجموعة
+const SPEEDS = {                       // call = متى الدلّال يقول مرة / مرتين / رسّى (ثواني بعد آخر زيادة)
+  fast:   { label: 'سريع',  call: [2, 3, 4],   open: 8 },
+  normal: { label: 'عادي',  call: [3, 4.5, 6], open: 12 },
+  slow:   { label: 'براحة', call: [5, 7.5, 10], open: 18 },
+};
+const PERSONAS = [
+  { name: 'الشاطر',     mult: 1.0,  lag: [0.8, 2.2] },
+  { name: 'أبو الفلوس', mult: 1.35, lag: [0.5, 1.6] },
+  { name: 'البخيل',     mult: 0.72, lag: [1.0, 2.6] },
+  { name: 'القناص',     mult: 1.1,  lag: [0.5, 1.0], snipe: true },
+  { name: 'المجنون',    mult: 1,    lag: [0.3, 1.2], wild: true },
+  { name: 'الهادي',     mult: 0.95, lag: [1.2, 3.0] },
+];
+const RARITY = [
+  { min: 92, name: 'أسطوري', c: '#FFC83D' },
+  { min: 85, name: 'ملحمي',  c: '#C792FF' },
+  { min: 75, name: 'نادر',   c: '#4CC9F0' },
+  { min: 0,  name: 'عادي',   c: '#9DB8B5' },
+];
+const rarityOf = p => RARITY.find(r => p >= r.min);
+const hueOf = s => { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.codePointAt(0)) % 360; return h; };
+
+/* ----- الإعدادات (بتتحفظ في المتصفح) ----- */
+const KEY = 'mazad.cfg.v1';
+const maxSlots = (catId, players) => Math.max(1, Math.min(6, Math.floor((ITEMS[catId].length - 2) / players)));
+const defaults = () => ({
+  budget: 100, speed: 'normal', sound: true,
+  slots: { anime: 4, sport: 3, food: 2, wear: 2 },
+  seats: [{ name: '', bot: false }, { name: '', bot: true }, { name: '', bot: true }],
+});
+function sanitize(c) {
+  const d = defaults();
+  c = c && typeof c === 'object' ? c : {};
+  const seats = Array.isArray(c.seats) ? c.seats.slice(0, 6).map(s => ({ name: String(s && s.name || '').slice(0, 14), bot: !!(s && s.bot) })) : d.seats;
+  while (seats.length < 2) seats.push({ name: '', bot: true });
+  const slots = {};
+  for (const cat of CATS) {
+    const v = c.slots && Number.isInteger(c.slots[cat.id]) ? c.slots[cat.id] : d.slots[cat.id];
+    slots[cat.id] = Math.max(0, Math.min(maxSlots(cat.id, seats.length), v));
+  }
+  return { budget: BUDGETS.includes(c.budget) ? c.budget : d.budget, speed: SPEEDS[c.speed] ? c.speed : d.speed, sound: c.sound !== false, slots, seats };
+}
+let cfg = (() => { try { return sanitize(JSON.parse(localStorage.getItem(KEY))); } catch (e) { return sanitize(null); } })();
+const saveCfg = () => { try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch (e) { /* مفيش مشكلة */ } };
+
+/* ----- أحداث بين المحرك والواجهة ----- */
+const on = {};
+const emit = (e, d) => { try { if (on[e]) on[e](d); } catch (err) { console.error(e, err); } };
+
+/* ----- حالة اللعبة ----- */
+let G = null;
+const need = (p, catId) => G.slots[catId] - p.items.filter(i => i.cat === catId).length;
+const slotsLeft = p => sum(G.cats.slice(Math.max(G.ci, 0)), c => Math.max(0, need(p, c.id)));
+const maxBid = p => p.budget - (slotsLeft(p) - 1);          // لازم تسيب 1 لكل خانة فاضلة
+const eligible = (p, catId) => need(p, catId) > 0 && maxBid(p) >= 1;
+const nextPrice = (price, inc) => price === 0 ? 1 : (Math.floor(price / inc) + 1) * inc;
+const incsFor = b => b <= 100 ? [1, 5, 10] : b <= 300 ? [1, 5, 10, 25] : [5, 10, 25, 100];
+const humanPrice = p => G && G.lot ? Math.min(nextPrice(G.lot.price, G.inc), maxBid(p)) : 0;
+const canBid = p => { const l = G && G.lot; return !!l && l.state === 'live' && !G.paused && l.leader !== p.id && eligible(p, l.cat.id) && humanPrice(p) > l.price; };
+
+function newPlayers() {
+  const names = new Set(); let bots = 0;
+  return cfg.seats.map((s, i) => {
+    const persona = s.bot ? PERSONAS[bots++ % PERSONAS.length] : null;
+    const base = s.name.trim() || (persona ? persona.name : 'لاعب ' + (i + 1));
+    let name = base, n = 1;
+    while (names.has(name)) name = base + ' ' + (++n);
+    names.add(name);
+    return { id: i, name, bot: !!persona, persona, color: COLORS[i], budget: cfg.budget, items: [], nextAt: Infinity };
+  });
+}
+
+function startGame() {
+  const cats = CATS.filter(c => cfg.slots[c.id] > 0);
+  const total = sum(cats, c => cfg.slots[c.id]);
+  if (!total) return 'اختار خانة واحدة على الأقل.';
+  if (cfg.budget < total * 2) return `الميزانية صغيرة على ${total} خانة. زوّدها أو قلّل الخانات.`;
+  const incs = incsFor(cfg.budget);
+  G = { players: newPlayers(), cats, ci: -1, budget: cfg.budget, slots: { ...cfg.slots }, pool: [], lot: null, clock: 0, paused: false, incs, inc: incs[1], soldInCat: 0, lotsInCat: 0 };
+  saveCfg();
+  enterRound();
+  return '';
+}
+
+function buildPool(cat) {
+  const list = ITEMS[cat.id].map(i => ({ ...i }));
+  const kinds = [...new Set(list.map(i => i.k))];
+  if (kinds.length < 2) return shuffle(list);
+  const groups = kinds.map(k => shuffle(list.filter(i => i.k === k)));   // عشان كل دفعة فيها من كل نوع
+  const out = [];
+  while (groups.some(g => g.length)) out.push(...shuffle(groups.filter(g => g.length).map(g => g.pop())));
+  return out;
+}
+
+function enterRound() {
+  G.lot = null; G.ci++;
+  if (G.ci >= G.cats.length) return finish();
+  const cat = G.cats[G.ci];
+  G.pool = buildPool(cat);
+  G.soldInCat = 0; G.lotsInCat = G.players.length * G.slots[cat.id];
+  emit('intro', { cat, n: G.ci + 1, of: G.cats.length, slots: G.slots[cat.id] });
+}
+
+function finish() { G.lot = null; emit('results'); }
+
+function nextLot() {
+  const cat = G.cats[G.ci];
+  if (!G.players.some(p => need(p, cat.id) > 0) || !G.pool.length) return enterRound();
+  const item = G.pool.shift();
+  const el = G.players.filter(p => eligible(p, cat.id));
+  if (!el.length) return nextLot();
+  const sp = SPEEDS[cfg.speed];
+  const lot = { item, cat, price: 0, leader: null, state: 'live', lastBid: G.clock, call: 0, doneAt: 0, auto: false, val: {}, callT: sp.call, openWait: sp.open };
+  G.lot = lot;
+  if (el.length === 1) { lot.auto = true; lot.price = 1; lot.leader = el[0].id; lot.callT = [0.5, 0.9, 1.3]; }
+  for (const b of G.players) if (b.bot) { lot.val[b.id] = botValue(b, lot); schedule(b); }
+  emit('lot', lot);
+}
+
+function bid(pid, amount) {
+  const lot = G && G.lot, p = G && G.players[pid];
+  if (!lot || lot.state !== 'live' || G.paused || !p) return false;
+  if (lot.leader === pid || !eligible(p, lot.cat.id) || !(amount > lot.price) || amount > maxBid(p)) return false;
+  lot.price = amount; lot.leader = pid; lot.lastBid = G.clock; lot.call = 0;
+  for (const b of G.players) if (b.bot) schedule(b);
+  emit('bid', { p, amount });
+  return true;
+}
+
+/* ----- الكمبيوتر ----- */
+function botValue(b, lot) {
+  const per = b.budget / Math.max(1, slotsLeft(b));
+  let m = (b.persona.wild ? rnd(0.5, 1.7) : b.persona.mult) * rnd(0.85, 1.2);
+  const mine = b.items.filter(i => i.cat === lot.cat.id), set = lot.cat.set;
+  if (mine.some(i => i.t === lot.item.t)) m *= 1.15;
+  if (set && lot.item.k && set.need.includes(lot.item.k) && !mine.some(i => i.k === lot.item.k) && G.slots[lot.cat.id] >= set.need.length) m *= 1.2;
+  const value = per * (Math.pow(lot.item.p / 80, 6) / 1.8) * m;
+  const urgent = need(b, lot.cat.id) / (G.pool.length + 1) > 0.6;
+  return Math.max(value, urgent ? per * 0.8 : 1);
+}
+function schedule(b) {
+  const lot = G.lot, sp = SPEEDS[cfg.speed], f = sp.call[2] / 6, pr = b.persona;
+  if (!lot || lot.leader === b.id || !eligible(b, lot.cat.id)) { b.nextAt = Infinity; return; }
+  b.nextAt = pr.snipe && lot.leader !== null ? lot.lastBid + lot.callT[0] - rnd(0.3, 0.9) : G.clock + rnd(pr.lag[0], pr.lag[1]) * f;
+}
+function botAct(b) {
+  const lot = G.lot;
+  if (lot.leader === b.id || !eligible(b, lot.cat.id)) { b.nextAt = Infinity; return; }
+  const v = lot.val[b.id], cap = Math.min(Math.floor(v), maxBid(b));
+  const np = Math.min(lot.price === 0 ? 1 : lot.price + Math.max(1, Math.round(v * rnd(0.04, 0.14))), cap);
+  if (np <= lot.price || (lot.price > 0 && Math.random() < 0.1)) { b.nextAt = Infinity; return; }
+  bid(b.id, np);
+}
+
+/* ----- الوقت ----- */
+function tick(dt) {
+  if (!G || G.paused || !G.lot) return;
+  G.clock += dt;
+  const lot = G.lot;
+  if (lot.state !== 'live') { if (G.clock - lot.doneAt >= 1.9) nextLot(); return; }
+  const since = G.clock - lot.lastBid;
+  if (lot.leader === null) { if (since >= lot.openWait) endLot(false); }
+  else {
+    const t = lot.callT, stage = since >= t[2] ? 3 : since >= t[1] ? 2 : since >= t[0] ? 1 : 0;
+    if (stage !== lot.call) { lot.call = stage; emit('call', stage); }
+    if (stage === 3) return endLot(true);
+  }
+  for (const b of G.players) if (b.bot && lot.state === 'live' && G.clock >= b.nextAt) botAct(b);
+}
+function endLot(sold) {
+  const lot = G.lot; lot.doneAt = G.clock;
+  if (sold) {
+    const p = G.players[lot.leader];
+    p.budget -= lot.price;
+    p.items.push({ ...lot.item, price: lot.price });
+    lot.state = 'sold'; G.soldInCat++;
+    emit('sold', { p, lot });
+  } else {
+    lot.state = 'unsold';
+    if (!lot.item._r) G.pool.push({ ...lot.item, _r: 1 });
+    emit('unsold', { lot });
+  }
+}
+function setPaused(v) { if (G) { G.paused = !!v; emit('pause', G.paused); } }
+
+/* ----- النتيجة ----- */
+function scoreTeam(p) {
+  let base = 0, bonus = 0; const notes = [];
+  for (const cat of G.cats) {
+    const its = p.items.filter(i => i.cat === cat.id), cnt = {};
+    base += sum(its, i => i.p);
+    its.forEach(i => { cnt[i.t] = (cnt[i.t] || 0) + 1; });
+    for (const [t, n] of Object.entries(cnt)) if (n > 1) { bonus += (n - 1) * COMBO; notes.push({ l: `كومبو ${t} ×${n}`, v: (n - 1) * COMBO }); }
+    const s = cat.set;
+    if (s && G.slots[cat.id] >= s.need.length && s.need.every(k => its.some(i => i.k === k))) { bonus += s.bonus; notes.push({ l: s.label, v: s.bonus }); }
+  }
+  const left = Math.round(p.budget * 50 / G.budget);         // الميزانية كلها = 50 نقطة مهما كان حجمها
+  return { base, bonus, coins: p.budget, left, total: base + bonus + left, notes };
+}
+function ranking() {
+  const rows = G.players.map(p => ({ p, s: scoreTeam(p) })).sort((a, b) => b.s.total - a.s.total);
+  rows.forEach((r, i) => { r.rank = i && r.s.total === rows[i - 1].s.total ? rows[i - 1].rank : i + 1; });
+  return rows;
+}
+
+/* ----- ساعة اللعبة ----- */
+let lastFrame = 0;
+function frame(t) { tick(Math.min(0.25, (t - lastFrame) / 1000 || 0)); lastFrame = t; requestAnimationFrame(frame); }
+requestAnimationFrame(t => { lastFrame = t; requestAnimationFrame(frame); });
+
+
+/* ==========================================================
+   الواجهة (1): تنقل، صوت، شاشة الإعدادات
+   ========================================================== */
+const SCREENS = ['setup', 'intro', 'auction', 'results'];
+function show(name) {
+  const was = !$('#s-' + name).hidden;
+  SCREENS.forEach(s => { $('#s-' + s).hidden = s !== name; });
+  if (!was) window.scrollTo(0, 0);
+}
+let toastT = 0;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2800);
+}
+const P = n => '\u200E+' + n;   // بتخلي علامة + قدّام الرقم مش بعده في النص العربي
+const say = msg => { $('#live').textContent = msg; };
+
+/* ----- صوت واهتزاز ----- */
+let AC = null;
+function tone(f, d, type = 'square', vol = 0.05, f2 = null, delay = 0) {
+  if (!cfg.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const t = AC.currentTime + delay, o = AC.createOscillator(), g = AC.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + d + 0.02);
+  } catch (e) { /* الصوت اختياري */ }
+}
+const sfx = {
+  bid: () => tone(620, 0.08, 'triangle', 0.05),
+  call: n => tone(n === 1 ? 420 : 340, 0.12, 'square', 0.035),
+  sold: () => { tone(180, 0.24, 'sawtooth', 0.08, 50); tone(900, 0.1, 'square', 0.035, 300, 0.02); },
+  lot: () => tone(520, 0.06, 'triangle', 0.04),
+};
+const buzz = ms => { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* مش مهم */ } };
+function syncSound() {
+  const b = $('#b-sound');
+  b.setAttribute('aria-pressed', String(cfg.sound)); b.textContent = cfg.sound ? '🔊' : '🔇';
+}
+$('#b-sound').onclick = () => { cfg.sound = !cfg.sound; saveCfg(); syncSound(); };
+
+/* ----- شاشة الإعدادات ----- */
+function setHint(c) {
+  if (!c.set) return 'كومبو لنفس المسلسل';
+  return cfg.slots[c.id] >= c.set.need.length ? `طقم كامل: ${c.set.label} (${P(c.set.bonus)})` : `${c.set.label} من ${c.set.need.length} خانات`;
+}
+function renderSetup() {
+  const n = cfg.seats.length;
+  $('#seats').innerHTML = cfg.seats.map((s, i) => `
+    <div class="seat" style="--pc:${COLORS[i]}">
+      <span class="dot"></span>
+      <input class="name" data-i="${i}" value="${esc(s.name)}" maxlength="14" placeholder="${s.bot ? 'اسم الكمبيوتر (اختياري)' : 'لاعب ' + (i + 1)}" aria-label="اسم اللاعب ${i + 1}">
+      <div class="seg" role="group" aria-label="نوع اللاعب ${i + 1}">
+        <button type="button" data-a="human" data-i="${i}" aria-pressed="${!s.bot}">لاعب</button>
+        <button type="button" data-a="bot" data-i="${i}" aria-pressed="${s.bot}">كمبيوتر</button>
+      </div>
+      ${n > 2 ? `<button class="x" type="button" data-a="del" data-i="${i}" aria-label="شيل اللاعب ${i + 1}">×</button>` : ''}
+    </div>`).join('');
+  $('#add-seat').hidden = n >= 6;
+  $('#budget').innerHTML = BUDGETS.map(b => `<button type="button" data-b="${b}" aria-pressed="${cfg.budget === b}">${b}</button>`).join('');
+  $('#speed').innerHTML = Object.entries(SPEEDS).map(([k, v]) => `<button type="button" data-s="${k}" aria-pressed="${cfg.speed === k}">${v.label}</button>`).join('');
+  $('#slots').innerHTML = CATS.map(c => {
+    const mx = maxSlots(c.id, n), v = cfg.slots[c.id];
+    return `<div class="row"><div class="lbl"><span class="ico">${c.ico}</span><span>${c.name}<small>${setHint(c)}</small></span></div>
+      <div class="step"><button type="button" data-c="${c.id}" data-d="-1" aria-label="أقل: ${c.name}" ${v <= 0 ? 'disabled' : ''}>−</button><output>${v}</output><button type="button" data-c="${c.id}" data-d="1" aria-label="أكتر: ${c.name}" ${v >= mx ? 'disabled' : ''}>+</button></div></div>`;
+  }).join('');
+  const total = sum(CATS, c => cfg.slots[c.id]);
+  $('#sum').textContent = total ? `${total} خانة لكل لاعب · ${total * n} عنصر في المزاد` : 'اختار خانة واحدة على الأقل.';
+}
+const clampSlots = () => { for (const c of CATS) cfg.slots[c.id] = Math.min(cfg.slots[c.id], maxSlots(c.id, cfg.seats.length)); };
+const changed = () => { clampSlots(); saveCfg(); renderSetup(); };
+
+$('#seats').addEventListener('click', e => {
+  const b = e.target.closest('button[data-a]'); if (!b) return;
+  const i = +b.dataset.i;
+  if (b.dataset.a === 'del') cfg.seats.splice(i, 1); else cfg.seats[i].bot = b.dataset.a === 'bot';
+  changed();
+});
+$('#seats').addEventListener('input', e => {
+  const el = e.target.closest('.name'); if (!el) return;
+  cfg.seats[+el.dataset.i].name = el.value; saveCfg();
+});
+$('#add-seat').onclick = () => { if (cfg.seats.length < 6) { cfg.seats.push({ name: '', bot: false }); changed(); } };
+$('#budget').addEventListener('click', e => { const b = e.target.closest('[data-b]'); if (b) { cfg.budget = +b.dataset.b; changed(); } });
+$('#speed').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (b) { cfg.speed = b.dataset.s; changed(); } });
+$('#slots').addEventListener('click', e => {
+  const b = e.target.closest('[data-c]'); if (!b) return;
+  const id = b.dataset.c;
+  cfg.slots[id] = Math.max(0, Math.min(maxSlots(id, cfg.seats.length), cfg.slots[id] + +b.dataset.d));
+  changed();
+});
+$('#start').onclick = () => { tone(440, 0.001, 'sine', 0.0001); const err = startGame(); if (err) toast(err); };
+$('#rules').onclick = () => $('#d-rules').showModal();
+
+/* ----- النوافذ ----- */
+document.addEventListener('click', e => { const b = e.target.closest('[data-close]'); if (b) b.closest('dialog').close(); });
+$$('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+function openPausing(dlg) {
+  const was = G ? G.paused : true;
+  if (G) setPaused(true);
+  dlg.addEventListener('close', () => { if (G && !was) setPaused(false); }, { once: true });
+  dlg.showModal();
+}
+
+
+/* ==========================================================
+   الواجهة (2): الجولة، المزاد، النتيجة
+   ========================================================== */
+const CALLS = ['', 'مرة…', 'مرتين…', 'رسّى!'];
+const thumb = i => i.img ? `<img src="${esc(i.img)}" alt="" data-e="${esc(i.e)}" onerror="this.replaceWith(this.dataset.e)">` : esc(i.e);   // لو الصورة ماتحمّلتش يظهر الإيموجي
+const tile = i => `<div class="tile" style="--h:${hueOf(i.t)};--rc:${rarityOf(i.p).c}"><span class="e">${thumb(i)}</span><b>${esc(i.n)}</b><small>🪙 ${i.price}</small></div>`;
+const emptyTile = '<div class="tile empty"><span class="e">＋</span><small>فاضي</small></div>';
+const clearStamp = () => $$('.stamp').forEach(s => s.remove());
+function stamp(html, cls, color) {
+  clearStamp();
+  $('#stage').insertAdjacentHTML('beforeend', `<div class="stamp ${cls}" style="--pc:${color}">${html}</div>`);
+}
+function restart(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+
+/* ----- مقدمة الجولة ----- */
+on.intro = ({ cat, n, of, slots }) => {
+  $('#i-ico').textContent = cat.ico;
+  $('#i-tag').textContent = `الجولة ${n} من ${of}`;
+  $('#i-name').textContent = cat.name;
+  const hint = !cat.set ? 'نفس المسلسل بيدّيك كومبو.' : slots >= cat.set.need.length ? `الطقم الكامل (${cat.set.label}) بيدّيك ${P(cat.set.bonus)}.` : '';
+  $('#i-text').textContent = `كل لاعب ليه ${slots} ${slots === 1 ? 'خانة' : 'خانات'} في الجولة دي. ${hint}`;
+  show('intro'); sfx.lot();
+};
+$('#i-go').onclick = () => { if (G && !G.lot) nextLot(); };
+
+/* ----- رسم المزاد ----- */
+function renderHUD() {
+  const cat = G.cats[G.ci];
+  $('#h-round').textContent = `${cat.ico} ${cat.name}`;
+  $('#h-lot').textContent = `الجولة ${G.ci + 1} من ${G.cats.length} · عنصر ${Math.min(G.soldInCat + 1, G.lotsInCat)} من ${G.lotsInCat}`;
+}
+function renderLot(l) {
+  const it = l.item, r = rarityOf(it.p), el = $('#lot');
+  el.style.setProperty('--h', hueOf(it.t)); el.style.setProperty('--rc', r.c);
+  el.classList.toggle('legend', r.min >= 92);
+  el.innerHTML = `<div class="art">${thumb(it)}</div>
+    <div class="info"><h2 class="nm">${esc(it.n)}</h2>
+      <div class="chips"><span class="chip r">${r.name}</span><span class="chip">${esc(it.t)}</span>${it.k ? `<span class="chip">${esc(it.k)}</span>` : ''}</div>
+      <div class="stat">${l.cat.stat} <b>${it.p}</b></div><div class="meter"><i style="--w:${it.p}%"></i></div></div>`;
+}
+function renderPrice(bump) {
+  const l = G.lot, price = $('#price'), who = $('#who');
+  price.textContent = l.price; if (bump) restart(price, 'bump');
+  if (l.leader === null) { who.className = 'who idle'; who.style.removeProperty('--pc'); who.textContent = 'مين يفتح؟'; }
+  else { const p = G.players[l.leader]; who.className = 'who'; who.style.setProperty('--pc', p.color); who.textContent = p.name; }
+}
+function renderCall(stage) {
+  const c = $('#call');
+  c.textContent = G.lot.leader === null ? '' : CALLS[stage];
+  c.classList.toggle('last', stage === 2);
+  if (stage) restart(c, 'pop');
+}
+function renderRoster() {
+  const l = G.lot, cat = G.cats[G.ci], all = sum(G.cats, c => G.slots[c.id]);
+  $('#roster').innerHTML = G.players.map(p => {
+    const done = sum(G.cats, c => p.items.filter(i => i.cat === c.id).length);
+    return `<button type="button" class="pl${l && l.leader === p.id ? ' lead' : ''}${need(p, cat.id) <= 0 ? ' full' : ''}" style="--pc:${p.color}" data-p="${p.id}" aria-label="فريق ${esc(p.name)}"><b>${esc(p.name)}${p.bot ? '<small class="bot"> 🤖</small>' : ''}</b><span><em>🪙 ${p.budget}</em> ${done}/${all}</span></button>`;
+  }).join('');
+}
+function buildPaddles() {
+  const hs = G.players.filter(p => !p.bot);
+  $('#paddles').innerHTML = hs.map(p => `<button type="button" class="paddle" data-p="${p.id}" style="--pc:${p.color}"><span class="n">${esc(p.name)}</span><span class="v"></span><span class="k">${p.id + 1}</span></button>`).join('');
+  $('#incs').innerHTML = G.incs.map(n => `<button type="button" class="inc" data-n="${n}" aria-pressed="${n === G.inc}">${P(n)}</button>`).join('');
+  $('#paddles').hidden = $('#incs').hidden = !hs.length;
+  $('#watch').hidden = !!hs.length;
+}
+function updatePaddles() {
+  const l = G.lot;
+  for (const el of $$('.paddle')) {
+    const p = G.players[+el.dataset.p];
+    el.disabled = !canBid(p);
+    el.classList.toggle('leading', !!l && l.state === 'live' && l.leader === p.id);
+    let v = '';
+    if (l) v = l.leader === p.id ? 'متصدر' : need(p, l.cat.id) <= 0 ? 'كمّلت ✓' : !eligible(p, l.cat.id) ? 'مفيش رصيد' : 'زايد ' + humanPrice(p);
+    $('.v', el).textContent = v;
+  }
+}
+
+let feed = [];
+function renderFeed() {
+  $('#feed').innerHTML = feed.slice(-5).reverse().map(f => `<li style="--pc:${f.color}"><i></i><b>${esc(f.name)}</b><span>${f.amount}</span></li>`).join('');
+}
+
+/* ----- أحداث المحرك ----- */
+on.lot = l => {
+  feed = []; renderFeed();
+  show('auction'); clearStamp(); renderHUD(); renderLot(l); renderRoster(); buildPaddles(); renderPrice(false); renderCall(0);
+  if (l.auto) $('#call').textContent = 'ماحدش غيرك محتاجها';
+  updatePaddles(); sfx.lot(); say(`العنصر: ${l.item.n}`);
+};
+on.bid = ({ p, amount }) => { feed.push({ name: p.name, color: p.color, amount }); renderFeed(); renderPrice(true); renderCall(0); renderRoster(); updatePaddles(); sfx.bid(); };
+on.call = s => { if (s < 3) { renderCall(s); sfx.call(s); } };
+on.sold = ({ p, lot }) => {
+  $('#call').textContent = '';
+  stamp(`<b>رسّى!</b><span>${esc(p.name)} · ${lot.price}</span>`, '', p.color);
+  renderRoster(); updatePaddles(); sfx.sold(); buzz(40);
+  say(`رسّى المزاد على ${p.name} بـ ${lot.price}`);
+};
+on.unsold = () => {
+  stamp('<b>محدش فتح</b><span>العنصر اتشال</span>', 'none', 'var(--gold-deep)');
+  updatePaddles(); say('محدش فتح المزاد');
+};
+on.pause = v => {
+  const b = $('#b-pause'), stage = $('#stage'), veil = $('.veil', stage);
+  b.textContent = v ? '▶' : '⏸'; b.setAttribute('aria-label', v ? 'كمّل' : 'إيقاف مؤقت');
+  if (v && !veil) stage.insertAdjacentHTML('beforeend', '<div class="veil"><b>واقف</b><button class="btn" type="button" id="v-go">كمّل</button></div>');
+  if (!v && veil) veil.remove();
+  if (G && G.lot) updatePaddles();
+};
+
+/* ----- تفاعل اللاعب ----- */
+function humanBid(pid) {
+  const p = G && G.players[pid];
+  if (p && !p.bot && G.lot && canBid(p) && bid(pid, humanPrice(p))) buzz(15);
+}
+$('#paddles').addEventListener('click', e => { const b = e.target.closest('.paddle'); if (b) humanBid(+b.dataset.p); });
+$('#incs').addEventListener('click', e => {
+  const b = e.target.closest('.inc'); if (!b) return;
+  G.inc = +b.dataset.n;
+  $$('.inc').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  updatePaddles();
+});
+$('#stage').addEventListener('click', e => { if (e.target.closest('#v-go')) setPaused(false); });
+// بعد الضغط بالماوس أو باللمس الزرار مايفضلش ماسك الفوكس، عشان المسافة تفضل بتوقّف اللعبة
+document.addEventListener('click', e => { const b = e.target.closest('button'); if (b && e.detail && !b.closest('dialog')) b.blur(); });
+$('#b-pause').onclick = () => { if (G && G.lot) setPaused(!G.paused); };
+$('#b-quit').onclick = () => openPausing($('#d-quit'));
+$('#q-yes').onclick = () => { $('#d-quit').close(); G = null; renderSetup(); show('setup'); };
+document.addEventListener('visibilitychange', () => { if (document.hidden && G && G.lot && G.lot.state === 'live') setPaused(true); });
+const keysOn = e => G && G.lot && !$('#s-auction').hidden && !$('dialog[open]') && !e.ctrlKey && !e.metaKey && !e.altKey && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+document.addEventListener('keydown', e => {
+  if (!keysOn(e)) return;
+  if (e.key === ' ') { e.preventDefault(); if (!e.repeat) setPaused(!G.paused); }
+  else if (/^[1-6]$/.test(e.key)) humanBid(+e.key - 1);
+});
+document.addEventListener('keyup', e => { if (e.key === ' ' && keysOn(e)) e.preventDefault(); });   // عشان زرار فيه فوكس مايتضغطش مرتين
+
+/* ----- فريق لاعب ----- */
+function openTeam(pid) {
+  const p = G.players[pid], s = scoreTeam(p);
+  $('#d-team-body').innerHTML = `<h3 style="color:${p.color}">${esc(p.name)}</h3><p>🪙 ${p.budget} · نقاط لحد دلوقتي ${s.base + s.bonus}</p>` +
+    G.cats.map(c => {
+      const its = p.items.filter(i => i.cat === c.id);
+      return `<h4>${c.ico} ${c.name} (${its.length}/${G.slots[c.id]})</h4><div class="tiles">${its.map(tile).join('')}${emptyTile.repeat(Math.max(0, G.slots[c.id] - its.length))}</div>`;
+    }).join('') + '<div class="btns"><button class="btn" type="button" data-close>تمام</button></div>';
+  openPausing($('#d-team'));
+}
+$('#roster').addEventListener('click', e => { const b = e.target.closest('.pl'); if (b) openTeam(+b.dataset.p); });
+
+/* ----- النتيجة ----- */
+const MEDALS = ['🥇', '🥈', '🥉'];
+on.results = () => {
+  const rows = ranking(), wins = rows.filter(r => r.rank === 1);
+  $('#r-sub').textContent = wins.length > 1 ? 'تعادل بين ' + wins.map(r => r.p.name).join(' و ') : `الفايز: ${wins[0].p.name}`;
+  $('#rank').innerHTML = rows.map(r => `
+    <article class="team${r.rank === 1 ? ' first' : ''}" style="--pc:${r.p.color}">
+      <div class="hd"><span class="medal">${MEDALS[r.rank - 1] || r.rank}</span><span class="tn">${esc(r.p.name)}</span><span class="sc">${r.s.total}</span></div>
+      <div class="parts"><span class="part">قوة العناصر ${r.s.base}</span>${r.s.notes.map(n => `<span class="part good">${esc(n.l)} ${P(n.v)}</span>`).join('')}<span class="part">فلوس باقية ${r.s.coins} (${P(r.s.left)})</span></div>
+      <div class="tiles">${r.p.items.map(tile).join('')}</div>
+    </article>`).join('');
+  show('results'); sfx.sold(); say($('#r-sub').textContent);
+};
+$('#r-again').onclick = () => { const err = startGame(); if (err) toast(err); };
+$('#r-setup').onclick = () => { G = null; renderSetup(); show('setup'); };
+$('#r-copy').onclick = async () => {
+  const txt = '🔨 مزاد الشخصيات\n' + ranking().map(r => `${MEDALS[r.rank - 1] || r.rank + '.'} ${r.p.name}: ${r.s.total} نقطة`).join('\n') + (/^https?:/.test(location.href) ? '\n' + location.href.split('#')[0] : '');
+  try { await navigator.clipboard.writeText(txt); }
+  catch (e) { const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e2) { /* مفيش نسخ */ } t.remove(); }
+  toast('اتنسخت. ابعتها في الجروب.');
+};
+
+/* ----- البداية ----- */
+syncSound(); renderSetup(); show('setup');
+window.__mazad = { get G() { return G; }, get cfg() { return cfg; }, tick, bid, humanBid, nextLot, startGame, ranking };
+
+</script>
+</body>
+</html>
