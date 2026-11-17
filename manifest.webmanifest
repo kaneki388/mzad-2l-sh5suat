@@ -1,0 +1,16 @@
+{
+  "name": "مزاد الشخصيات",
+  "short_name": "المزاد",
+  "description": "لعبة مزاد أونلاين مع أصحابك: أنمي وكورة وأكل وهدوم.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFD43B",
+  "theme_color": "#FFD43B",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

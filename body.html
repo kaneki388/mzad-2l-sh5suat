@@ -1,0 +1,157 @@
+<div id="app" data-w="home">
+
+<section id="s-home" class="screen" hidden>
+  <div class="wrap home">
+    <header class="brand">
+      <div class="logo" aria-hidden="true">🔨</div>
+      <h1>مزاد الشخصيات</h1>
+      <p>زايد، اكسب، وكوّن فريقك.</p>
+    </header>
+    <label class="field"><span>اسمك</span><input id="h-name" class="inp" maxlength="14" placeholder="اكتب اسمك" autocomplete="nickname"></label>
+    <nav class="menu" aria-label="طريقة اللعب">
+      <button id="m-back" class="mbtn m3" type="button" hidden><b>ارجع لغرفتك</b><small id="m-back-s"></small></button>
+      <button id="m-host" class="mbtn m2" type="button"><b>اعمل غرفة أونلاين</b><small>ابعت الكود لأصحابك وكل واحد يلعب من موبايله</small></button>
+      <button id="m-join" class="mbtn m3" type="button"><b>ادخل غرفة</b><small>معاك كود من صاحبك؟</small></button>
+      <button id="m-local" class="mbtn m1" type="button"><b>العب هنا</b><small>على نفس الجهاز، من غير نت</small></button>
+    </nav>
+    <button id="m-rules" class="lnk" type="button">القواعد</button>
+  </div>
+</section>
+
+<section id="s-join" class="screen" hidden>
+  <header class="bar"><button class="ib" id="j-back" type="button" aria-label="رجوع">→</button><h2>ادخل غرفة</h2></header>
+  <div class="wrap">
+    <div class="panel">
+      <label class="field"><span>كود الغرفة</span><input id="j-code" class="inp code" maxlength="5" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="ABCDE"></label>
+      <label class="field"><span>اسمك</span><input id="j-name" class="inp" maxlength="14" placeholder="اكتب اسمك"></label>
+      <button id="j-go" class="btn block" type="button">ادخل</button>
+      <p id="j-msg" class="hint" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<section id="s-setup" class="screen" hidden>
+  <header class="bar"><button class="ib" id="su-back" type="button" aria-label="رجوع">→</button><h2 id="su-title">الإعدادات</h2><button class="ib" id="su-chat" type="button" aria-label="الشات" hidden>💬<i class="dot" id="su-unread" hidden>0</i></button></header>
+  <div class="wrap">
+    <div class="panel room" id="su-room" hidden>
+      <span class="lab">كود الغرفة</span>
+      <b class="roomcode" id="su-code" dir="ltr"></b>
+      <div class="row"><button class="btn sm white" id="su-copy" type="button">انسخ الرابط</button><button class="btn sm" id="su-share" type="button" hidden>شارك</button></div>
+    </div>
+    <section class="panel"><h3>اللاعبين <small id="su-count"></small></h3><div id="su-seats"></div><div class="row adds" id="su-adds"><button class="chipb" id="su-add-human" type="button">+ لاعب</button><button class="chipb" id="su-add-bot" type="button">+ كمبيوتر</button></div></section>
+    <section class="panel"><h3>هنلعب إيه؟ <small>(كل نوع جولة لوحده)</small></h3><div id="su-cats"></div></section>
+    <section class="panel"><h3>الميزانية لكل لاعب</h3><div class="chips" id="su-budget"></div>
+      <label class="row sp switch"><span>ميزانية جديدة لكل نوع<small class="hint" style="display:block">لو قفلتها: ميزانية واحدة للكل</small></span><button id="su-sep" class="chipb" type="button" aria-pressed="true">شغّال</button></label></section>
+    <section class="panel"><h3>سرعة الدلّال</h3><div class="chips" id="su-speed"></div></section>
+    <div class="foot"><button class="btn block" id="su-start" type="button">ابدأ المزاد</button><p class="hint center" id="su-msg" role="status"></p></div>
+  </div>
+</section>
+
+<section id="s-intro" class="screen" hidden>
+  <div class="intro">
+    <div class="big" id="i-ico" aria-hidden="true"></div>
+    <span class="tag" id="i-tag"></span>
+    <h2 id="i-name"></h2>
+    <p class="lead" id="i-label"></p>
+    <div class="chips c" id="i-kinds"></div>
+    <p class="blurb" id="i-blurb"></p>
+    <div class="tips" id="i-tips"></div>
+    <button class="btn block" id="i-go" type="button">يلا</button>
+    <p class="hint c" id="i-wait"></p>
+  </div>
+</section>
+
+<section id="s-auction" class="screen" hidden>
+  <div class="hud">
+    <button class="ib" id="a-quit" type="button" aria-label="خروج">✕</button>
+    <div class="ttl"><b id="a-title"></b><span id="a-sub"></span></div>
+    <button class="ib" id="a-pause" type="button" aria-label="إيقاف مؤقت">⏸</button>
+    <button class="ib" id="a-sound" type="button" aria-label="الصوت" aria-pressed="true">🔊</button>
+    <button class="ib" id="a-chat" type="button" aria-label="الشات" hidden>💬<i class="dot" id="a-unread" hidden>0</i></button>
+  </div>
+  <div class="roster" id="a-roster"></div>
+  <div class="stage" id="a-stage">
+    <article class="lot" id="a-lot"></article>
+    <div class="board">
+      <div class="price-box"><span class="lab">السعر الحالي</span><b id="a-price">0</b></div>
+      <div class="lead idle" id="a-lead">مين يفتح؟</div>
+    </div>
+    <div class="status" id="a-status"></div>
+    <div class="timer" id="a-timer" hidden><i></i></div>
+    <ul class="feed" id="a-feed" aria-hidden="true"></ul>
+  </div>
+  <div class="dock" id="a-dock">
+    <div class="who" id="a-who" hidden></div>
+    <p class="dmsg" id="a-msg"></p>
+    <div class="amt" id="a-amt"><button class="ib" id="a-minus" type="button" aria-label="أقل">−</button><input id="a-input" class="inp" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="السعر"><button class="ib" id="a-plus" type="button" aria-label="أكتر">+</button></div>
+    <div class="quick" id="a-quick"></div>
+    <div class="acts"><button class="btn" id="a-bid" type="button">زايد</button><button class="btn white" id="a-pass" type="button">سيبه ياخده</button></div>
+  </div>
+</section>
+
+<section id="s-reveal" class="screen" hidden>
+  <div class="wrap">
+    <header class="rv-head"><div class="giftbig" aria-hidden="true">🎁</div><h2>الشخصيات المخفية</h2><p>اللي خسر بفارق خد شخصية سرية. هنشوف طلعت أقوى ولا أضعف.</p></header>
+    <div class="rv-list" id="rv-list"></div>
+    <button class="btn block" id="rv-skip" type="button">تخطي</button>
+  </div>
+</section>
+
+<section id="s-stage" class="screen" hidden>
+  <div class="wrap">
+    <header class="se-head"><span class="tag" id="se-tag"></span><h2 id="se-title"></h2></header>
+    <div class="rank" id="se-rank"></div>
+    <button class="btn block" id="se-next" type="button"></button>
+    <p class="hint c" id="se-wait"></p>
+  </div>
+</section>
+
+<section id="s-results" class="screen" hidden>
+  <div class="wrap res-wrap">
+    <header class="res-head"><div class="crown" aria-hidden="true">👑</div><h2 id="rs-winner"></h2><p id="rs-sub"></p></header>
+    <div class="rank" id="rs-rank"></div>
+    <div class="acts col">
+      <button class="btn block" id="rs-again" type="button">العب تاني</button>
+      <button class="btn block white" id="rs-copy" type="button">انسخ النتيجة</button>
+      <button class="btn block white" id="rs-home" type="button">الرئيسية</button>
+    </div>
+    <p class="hint c" id="rs-wait"></p>
+  </div>
+</section>
+
+</div>
+
+<aside id="chat" class="sheet" hidden aria-label="الشات">
+  <div class="sheet-card">
+    <header><h3>الشات</h3><button class="ib" id="c-close" type="button" aria-label="قفل">✕</button></header>
+    <div class="msgs" id="c-msgs" aria-live="polite"></div>
+    <div class="replying" id="c-reply" hidden><div><b></b><span></span></div><button class="ib" id="c-cancel" type="button" aria-label="إلغاء الرد">✕</button></div>
+    <div class="emo" id="c-emo"></div>
+    <form id="c-form" class="composer"><input id="c-input" class="inp" maxlength="300" placeholder="اكتب رسالة..." autocomplete="off"><button class="btn sm" type="submit">ابعت</button></form>
+  </div>
+</aside>
+
+<dialog id="d-rules"><div class="dlg">
+  <h3>القواعد</h3>
+  <ul>
+    <li>كل لاعب بيبدأ بنفس الميزانية، والهدف إنك تكمّل فريقك بأحسن عناصر.</li>
+    <li>كل نوع (أنمي، كورة، أكل، هدوم) جولة لوحده، وتقدر تلعب نوع واحد بس.</li>
+    <li>في كل عنصر واحد بيفتح المزاد بالسعر اللي هو يحدده، والدور بيتغير كل عنصر. بعده أي حد يزايد بأي سعر أعلى.</li>
+    <li>«سيبه ياخده» لو مش عايزه أو السعر غالي. لو كل المنافسين سابوه بيتباع فورًا.</li>
+    <li>لازم تسيب 1 على الأقل لكل خانة فاضلة، عشان تقدر تكمّل فريقك.</li>
+    <li>الأنمي 🎁: اللي يخسر بفارق (آخر واحد زايد قبل الفايز) بياخد شخصية مخفية مجانًا بتملى خانة، وبتتكشف آخر الجولة. ممكن تبقى أقوى من اللي خسره وممكن أضعف.</li>
+    <li>الكورة: كوّن فريق كامل بالتشكيلة (حارس ودفاع ووسط وهجوم). نفس البلد بيدّي كيميا.</li>
+    <li>الأكل: ركّب طبقك (العيش والبروتين والجبنة والصوص). الوصفات المشهورة بتدّي بونص.</li>
+    <li>الهدوم: أوت فيت كامل. نفس الستايل واللوكات المعروفة بتدّي بونص.</li>
+    <li>النتيجة = مجموع قوة العناصر + الكومبو + الوصفات + الفلوس الباقية (الميزانية كلها = 50 نقطة).</li>
+  </ul>
+  <div class="btns"><button class="btn" type="button" data-close>تمام</button></div>
+</div></dialog>
+<dialog id="d-team"><div class="dlg" id="d-team-body"></div></dialog>
+<dialog id="d-quit"><div class="dlg">
+  <h3 id="q-title">تخرج من اللعبة؟</h3><p id="q-text">اللعبة هتتقفل والنتيجة مش هتتحفظ.</p>
+  <div class="btns"><button class="btn white" type="button" data-close>كمّل لعب</button><button class="btn red" type="button" id="q-yes">اخرج</button></div>
+</div></dialog>
+
+<div class="toast" id="toast" hidden role="status"></div>
+<div class="sr" id="live" aria-live="polite"></div>

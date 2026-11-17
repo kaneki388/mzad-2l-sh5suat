@@ -1,0 +1,105 @@
+/* ===== الصور والخانات ===== */
+.art{position:relative}
+.art .em{position:relative;z-index:0}
+.art img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover}
+.art.has-img .em{visibility:hidden}
+.slot{display:grid;justify-items:center;align-content:start;gap:3px;min-width:0;text-align:center}
+.slot .art{width:100%;aspect-ratio:1;font-size:36px;border-radius:14px}
+.slot b{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:800 14px/1.25 var(--text)}
+.slot small{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:700 12px var(--text);color:#4d4766}
+.slot .pr{display:inline-block;min-width:26px;padding:0 7px;border:2px solid var(--ink);border-radius:99px;background:var(--rc,#ddd);color:var(--ink);font:800 12px/18px var(--display)}
+.slot.empty .art{border-style:dashed;background:repeating-linear-gradient(45deg,#f3f0fb 0 8px,#fff 8px 16px);color:#9a94b3;font-size:26px}
+.slot.empty b{color:#8a84a3;font-weight:600}
+.slot .art.q{font-size:40px}
+.slot.mine .art{box-shadow:0 0 0 3px var(--sun)}
+
+/* ===== شاشة الفريق ===== */
+#d-team .dlg h3{display:flex;align-items:center;gap:10px}
+#d-team .dlg h3 i{flex:none;width:16px;height:30px;border:2px solid var(--ink);border-radius:8px;background:var(--pc)}
+#d-team .dlg h3 small{margin-inline-start:auto;font:800 16px var(--text);color:#5d5778}
+.tabs{margin-bottom:12px}
+.tm{margin-top:4px}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pitch{position:relative;display:grid;gap:12px;padding:16px 8px;border:3px solid var(--ink);border-radius:18px;background:repeating-linear-gradient(0deg,#0A7F44 0 46px,#0c9150 46px 92px)}
+.pitch::before{content:"";position:absolute;inset:7px;border:2px solid #ffffffb0;border-radius:10px;pointer-events:none}
+.prow{display:flex;justify-content:space-around;gap:4px}
+.pslot{display:grid;justify-items:center;gap:2px;width:64px;min-width:0}
+.pslot .art{width:54px;height:54px;border-radius:50%;font-size:28px}
+.pslot b{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#fff;text-shadow:1px 1px 0 var(--ink),-1px 1px 0 var(--ink);font:800 12px/1.2 var(--text)}
+.pslot .pr{padding:0 6px;border:2px solid var(--ink);border-radius:99px;background:var(--rc,#ddd);color:var(--ink);font:800 11px/16px var(--display)}
+.pslot.empty .art{border:3px dashed #ffffffcc;background:#ffffff22;color:#fff}
+.pslot.empty b{color:#ffffffd0;font-weight:600}
+.kr{margin-top:12px}
+.kr:first-child{margin-top:0}
+.kr h4{display:flex;align-items:center;gap:6px;margin:0 0 6px;font:800 15px var(--text)}
+.kr h4 small{margin-inline-start:auto;font:700 12px var(--text);color:#5d5778}
+.cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.cells .slot .art{font-size:32px}
+.sum{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sum .tag.b{background:var(--sun);font-weight:800}
+.sum .tag.g{background:#d4f2e1}
+.rcps{display:grid;gap:6px;margin-top:12px}
+.rcp{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px;padding:6px 10px;border:2px solid var(--ink);border-radius:12px;background:#fff;font:700 14px var(--text)}
+.rcp .bar{grid-column:1/-1;height:8px;overflow:hidden;border:2px solid var(--ink);border-radius:99px;background:#eceaf5}
+.rcp .bar i{display:block;width:var(--w);height:100%;background:#8a84a3}
+.rcp.done{background:#d4f2e1}.rcp.done .bar i{background:var(--ok)}
+.rcp b{font-weight:800}
+.empty-note{margin:8px 0 0;color:#5d5778;font-weight:600;text-align:center}
+
+/* ===== الشخصيات المخفية ===== */
+.rv-head{padding:24px 0 6px;text-align:center;color:var(--on-w)}
+.giftbig{font-size:66px;line-height:1;animation:wob 1.6s ease-in-out infinite}
+.rv-head h2{margin-top:6px;font:800 clamp(34px,10vw,46px)/1.1 var(--display);text-shadow:3px 3px 0 var(--ink)}
+.rv-head p{max-width:34ch;margin:8px auto 0;font-weight:700;text-shadow:1px 1px 0 var(--ink)}
+.rv-list{display:grid;gap:14px;margin:14px 0 18px}
+.rvc{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;padding:12px;border:3px solid var(--ink);border-radius:20px;background:#fff;color:var(--ink);box-shadow:0 5px 0 var(--ink)}
+.rvc header{grid-column:1/-1;display:flex;align-items:center;gap:8px;font:800 19px var(--display)}
+.rvc header i{width:14px;height:24px;border:2px solid var(--ink);border-radius:7px;background:var(--pc)}
+.rvc .cap{display:block;margin-bottom:4px;text-align:center;font:800 13px var(--text);color:#5d5778}
+.rvc .side{min-width:0}
+.rvc .lost .art{filter:grayscale(.5);opacity:.85}
+.rvc .gift.new .art{animation:turn .55s ease-out}
+.verdict{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:4px 12px;border:3px solid var(--ink);border-radius:14px;background:#eceaf5;text-align:center;font:800 20px var(--display)}
+.verdict.up{background:#b8f0cf;animation:pop .45s ease-out}
+.verdict.down{background:#ffd0cb;animation:pop .45s ease-out}
+.verdict.eq{background:#fff3b8;animation:pop .45s ease-out}
+@keyframes turn{0%{transform:rotateY(90deg) scale(.8)}100%{transform:none}}
+
+/* ===== ترتيب الجولة والنتيجة ===== */
+.se-head,.res-head{padding:26px 0 4px;text-align:center;color:var(--on-w)}
+.se-head h2{margin-top:6px;font:800 clamp(34px,10vw,48px)/1.1 var(--display);text-shadow:3px 3px 0 var(--ink)}
+.se-head .tag{font-weight:800}
+.crown{font-size:72px;line-height:1;animation:wob 1.8s ease-in-out infinite}
+.res-head h2{font:800 clamp(34px,10vw,52px)/1.1 var(--display);text-shadow:3px 3px 0 var(--ink)}
+.res-head p{margin:6px 0 0;font-weight:800;text-shadow:1px 1px 0 var(--ink)}
+.rank{display:grid;gap:12px;margin:16px 0 18px}
+.rk{--pc:#ccc;position:relative;overflow:hidden;padding:12px 14px;border:3px solid var(--ink);border-radius:18px;background:#fff;color:var(--ink);box-shadow:0 5px 0 var(--ink)}
+.rk::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:10px;background:var(--pc);border-inline-end:2px solid var(--ink)}
+.rk>*{margin-inline-start:10px}
+.rk header{display:flex;align-items:center;gap:10px}
+.rk .pos{flex:none;display:grid;place-items:center;width:40px;height:40px;border:3px solid var(--ink);border-radius:12px;background:#eceaf5;font:800 22px var(--display)}
+.rk.r1 .pos{background:#FFC83D}.rk.r2 .pos{background:#dfe5ec}.rk.r3 .pos{background:#f0b27a}
+.rk .who{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:800 22px var(--display)}
+.rk .tot{flex:none;font:800 36px/1 var(--display)}
+.rk .brk{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rk .tag.g{background:#d4f2e1}.rk .tag.p{background:#e9e1ff}
+.rk .more{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:14px;color:#5d5778;font-weight:700}
+.rk .more .lnk{padding:4px 0;font-size:15px;color:#3a2bb8}
+.rk.win{background:#fff8d8}
+.acts.col .btn{min-height:54px}
+.res-wrap{padding-top:6px}
+.rvc .slot{width:100%;max-width:128px;margin-inline:auto}
+.rvc .slot .art{font-size:44px}
+.agrid{grid-template-columns:repeat(var(--cols,3),1fr)}
+/* صفوف الأكل والهدوم */
+.lns{display:grid;gap:8px}
+.ln{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:10px;padding:6px 10px 6px 8px;border:2px solid var(--ink);border-radius:14px;background:#fff}
+.ln .art{width:54px;height:54px;border-radius:12px;font-size:28px}
+.ln .meta{display:grid;min-width:0;line-height:1.3}
+.ln .kl{font:700 12px var(--text);color:#5d5778}
+.ln b{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:800 16px var(--text)}
+.ln small{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:600 12px var(--text);color:#4d4766}
+.ln .pr{min-width:38px;padding:2px 8px;border:2px solid var(--ink);border-radius:99px;background:var(--rc,#ddd);color:var(--ink);text-align:center;font:800 16px/1.2 var(--display)}
+.ln.empty{border-style:dashed;background:repeating-linear-gradient(45deg,#f6f3fd 0 8px,#fff 8px 16px)}
+.ln.empty .art{border-style:dashed;background:#fff;color:#9a94b3}
+.ln.empty b{color:#8a84a3;font-weight:600}
